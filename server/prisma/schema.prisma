@@ -1,0 +1,136 @@
+// This is your Prisma schema file.
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BookingStatus {
+  PENDING
+  ASSIGNED
+  EN_ROUTE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum MechanicStatus {
+  AVAILABLE
+  BUSY
+  OFF_DUTY
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  EMERGENCY
+}
+
+model Customer {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  phone     String
+  address   String
+  avatar    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  bookings  Booking[]
+
+  @@map("customers")
+}
+
+model Mechanic {
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  phone          String
+  avatar         String?
+  specialization String         // e.g. "Engine Diagnostics", "Brakes & Suspension", "EV Systems"
+  status         MechanicStatus @default(AVAILABLE)
+  rating         Float          @default(5.0)
+  completedJobs  Int            @default(0)
+  currentLat     Float?         // Geolocation for live map tracking
+  currentLng     Float?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  bookings       Booking[]
+
+  @@map("mechanics")
+}
+
+model ServiceItem {
+  id               String    @id @default(uuid())
+  name             String    @unique // e.g. "Full Synthetic Oil Change", "Brake Pad Replacement"
+  category         String    // e.g. "Maintenance", "Brakes", "Diagnostics", "Tires", "Electrical"
+  description      String?
+  basePrice        Float
+  estimatedDuration Int      // Duration in minutes (e.g. 45, 90)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  bookings         Booking[]
+
+  @@map("services")
+}
+
+model Booking {
+  id             String        @id @default(uuid())
+  bookingNumber  String        @unique // Human-readable e.g. "BK-10492"
+  
+  // Relations
+  customerId     String
+  customer       Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  
+  mechanicId     String?
+  mechanic       Mechanic?     @relation(fields: [mechanicId], references: [id], onDelete: SetNull)
+  
+  serviceId      String
+  service        ServiceItem   @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  // Vehicle Details
+  vehicleMake    String        // e.g. "Toyota", "Tesla", "Ford"
+  vehicleModel   String        // e.g. "Camry", "Model 3", "F-150"
+  vehicleYear    Int           // e.g. 2022
+  licensePlate   String        // e.g. "CA-8XYZ90"
+
+  // Service & Status
+  status         BookingStatus @default(PENDING)
+  priority       PriorityLevel @default(MEDIUM)
+  amount         Float
+  notes          String?
+  customerAddress String
+
+  // Timeline tracking
+  scheduledAt    DateTime      @default(now())
+  completedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  logs           BookingLog[]
+
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([customerId])
+  @@index([mechanicId])
+  @@map("bookings")
+}
+
+model BookingLog {
+  id         String        @id @default(uuid())
+  bookingId  String
+  booking    Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  status     BookingStatus
+  message    String        // e.g. "Status changed from PENDING to ASSIGNED to John Doe"
+  createdAt  DateTime      @default(now())
+
+  @@map("booking_logs")
+}
