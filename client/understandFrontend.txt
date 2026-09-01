@@ -1,0 +1,96 @@
+================================================================================
+                    AUTOMOTION - FRONTEND TECH & TOOLS GUIDE
+================================================================================
+This guide explains every tool and library used in the AutoMotion frontend in simple,
+easy-to-understand terms: what it is, why we use it, and how it works in our project.
+================================================================================
+
+--------------------------------------------------------------------------------
+1. Next.js (App Router)
+--------------------------------------------------------------------------------
+• What is it?
+  - A modern React framework for building web applications.
+• Why do we use it?
+  - Normal React requires manual routing setup and slower client-side loading.
+  - Next.js gives us folder-based routing (e.g. `app/bookings/page.tsx`), fast server
+    rendering, optimized font and image loading, and instant 1-click deployment to Vercel.
+• How it works in AutoMotion:
+  - `src/app/page.tsx` -> The main Live Operations Dashboard.
+  - `src/app/bookings/page.tsx` -> Comprehensive Bookings Management Table.
+  - `src/app/mechanics/page.tsx` -> Mechanics Live Fleet & Map view.
+  - `src/app/layout.tsx` -> Global shell containing the sidebar, navbar, and theme styles.
+
+--------------------------------------------------------------------------------
+2. Tailwind CSS
+--------------------------------------------------------------------------------
+• What is it?
+  - A utility-first CSS framework.
+• Why do we use it?
+  - Instead of switching between HTML and large `.css` files writing class rules,
+    Tailwind lets us apply styles directly with short names (e.g., `flex`, `p-4`,
+    `bg-slate-900`, `rounded-xl`, `text-blue-500`, `shadow-lg`).
+• How it works in AutoMotion:
+  - Used across all components to create a dark-themed SaaS aesthetic with glowing
+    status badges, crisp borders, and smooth hover animations.
+
+--------------------------------------------------------------------------------
+3. Lucide React (Icons)
+--------------------------------------------------------------------------------
+• What is it?
+  - A clean, modern icon library for React.
+• Why do we use it?
+  - Provides lightweight vector icons (wrenches, cars, speedometers, clocks, users,
+    dollar signs, checkmarks, map pins) that make the UI look professional.
+• How it works in AutoMotion:
+  - Imported in navigation, KPI cards, table status pills, and action buttons.
+
+--------------------------------------------------------------------------------
+4. Recharts (Analytics & Charts)
+--------------------------------------------------------------------------------
+• What is it?
+  - A declarative charting library built for React components.
+• Why do we use it?
+  - Drawing custom interactive bar charts and area curves with SVG/Canvas from scratch
+    is tedious. Recharts renders responsive, animated charts with tooltip hover states.
+• How it works in AutoMotion:
+  - Used in `src/components/RevenueChart.tsx` and `src/components/StatusChart.tsx`
+    to render:
+    1. Revenue Trends over past 30 days
+    2. Booking Volume curve
+    3. Service Category breakdowns
+
+--------------------------------------------------------------------------------
+5. Socket.io Client (Real-Time Live Updates)
+--------------------------------------------------------------------------------
+• What is it?
+  - The browser-side WebSocket library that connects to the backend Socket.io server.
+• Why do we use it?
+  - Allows the dashboard to listen for live events (`booking:created`, `booking:updated`,
+    `dashboard:stats_updated`) and instantly update state and charts without needing
+    the user to refresh the browser.
+• How it works in AutoMotion:
+  - `src/lib/socket.ts` establishes a single persistent connection to `http://localhost:5000`.
+  - When you trigger the simulation, status pills in the table and KPI counters
+    glow and transition live before your eyes.
+
+--------------------------------------------------------------------------------
+6. Leaflet & React-Leaflet (Interactive Maps)
+--------------------------------------------------------------------------------
+• What is it?
+  - An open-source interactive mapping library using OpenStreetMap tiles (100% free).
+• Why do we use it?
+  - Lets us visualize active mechanics across the city with custom map pins, popup info
+    cards, and live availability indicators.
+• How it works in AutoMotion:
+  - Rendered inside the Mechanics Fleet page to show technician GPS locations.
+
+================================================================================
+                    SUMMARY: HOW DATA FLOWS IN AUTOMOTION
+================================================================================
+1. User opens Browser (http://localhost:3000)
+2. Next.js loads the UI components.
+3. Client fetches initial data via REST API (`GET http://localhost:5000/api/dashboard/stats`).
+4. Socket.io connects in the background.
+5. When a mechanic dispatches or status changes, backend broadcasts `booking:updated`.
+6. Dashboard updates instantly without page reload!
+================================================================================
