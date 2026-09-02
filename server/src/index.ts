@@ -61,10 +61,10 @@ app.use(errorHandler);
 const PORT = config.port;
 httpServer.listen(PORT, () => {
   console.log(`\n======================================================`);
-  console.log(`🚀 AutoMotion API Server running on port ${PORT}`);
-  console.log(`📡 WebSocket server active and ready for live events`);
-  console.log(`📖 Swagger API Docs available at: http://localhost:${PORT}/api/docs`);
-  console.log(`❤️  Health Check: http://localhost:${PORT}/api/health`);
+  console.log(`AutoMotion API Server running on port ${PORT}`);
+  console.log(`WebSocket server active and ready for live events`);
+  console.log(`Swagger API Docs available at: http://localhost:${PORT}/api/docs`);
+  console.log(`Health Check: http://localhost:${PORT}/api/health`);
   console.log(`======================================================\n`);
 });
 

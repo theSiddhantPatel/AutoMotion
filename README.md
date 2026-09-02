@@ -1,4 +1,4 @@
-# 🚗 AutoMotion — Live Vehicle Service Operations Dashboard
+#  AutoMotion — Live Vehicle Service Operations Dashboard
 
 AutoMotion is a production-grade, real-time SaaS operations platform built for vehicle service dispatchers, fleet operations managers, and mobile technicians.
 

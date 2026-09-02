@@ -53,6 +53,7 @@ export default function DashboardPage() {
   const [isSimulating, setIsSimulating] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isNewBookingOpen, setIsNewBookingOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
   const [isLoadingBookings, setIsLoadingBookings] = useState(false);
 
@@ -236,7 +237,11 @@ export default function DashboardPage() {
   return (
     <div className="flex min-h-screen bg-[#090d16]">
       {/* Navigation Sidebar */}
-      <Sidebar wsConnected={wsConnected} />
+      <Sidebar
+        wsConnected={wsConnected}
+        isOpenMobile={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
+      />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
@@ -250,9 +255,10 @@ export default function DashboardPage() {
             setSearch(val);
             setCurrentPage(1);
           }}
+          onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
         />
 
-        <main className="p-6 space-y-6 flex-1 max-w-7xl mx-auto w-full">
+        <main className="p-3 sm:p-6 space-y-4 sm:space-y-6 flex-1 max-w-7xl mx-auto w-full">
           {/* Overview KPI Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard

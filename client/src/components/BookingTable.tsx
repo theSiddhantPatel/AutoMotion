@@ -116,25 +116,25 @@ export const BookingTable: React.FC<BookingTableProps> = ({
   return (
     <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden backdrop-blur-md">
       {/* Header & Filter Controls Bar */}
-      <div className="p-4 sm:p-5 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 sm:p-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
             Operations Bookings Roster
-            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
               {totalBookings} Total
             </span>
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">Live vehicle dispatch queue and telemetry</p>
+          <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">Live vehicle dispatch queue and telemetry</p>
         </div>
 
         {/* Filter controls */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Status Filter */}
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-none">
             <select
               value={statusFilter}
               onChange={(e) => onStatusFilterChange(e.target.value)}
-              className="bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
+              className="w-full sm:w-auto bg-slate-950/80 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
             >
               <option value="">All Statuses</option>
               <option value="PENDING">Pending</option>
@@ -147,11 +147,11 @@ export const BookingTable: React.FC<BookingTableProps> = ({
           </div>
 
           {/* Priority Filter */}
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-none">
             <select
               value={priorityFilter}
               onChange={(e) => onPriorityFilterChange(e.target.value)}
-              className="bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
+              className="w-full sm:w-auto bg-slate-950/80 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
             >
               <option value="">All Priorities</option>
               <option value="LOW">Low</option>
@@ -161,6 +161,11 @@ export const BookingTable: React.FC<BookingTableProps> = ({
             </select>
           </div>
         </div>
+      </div>
+
+      {/* Mobile Swipe Hint */}
+      <div className="md:hidden px-4 py-1.5 bg-slate-950/60 border-b border-slate-800/60 text-[10px] text-slate-500 flex items-center justify-between">
+        <span>← Swipe horizontally to view full booking details →</span>
       </div>
 
       {/* Table Content */}

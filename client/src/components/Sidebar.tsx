@@ -10,15 +10,21 @@ import {
   BarChart3,
   Users,
   Radio,
-  Sparkles,
   ShieldCheck,
+  X,
 } from 'lucide-react';
 
 interface SidebarProps {
   wsConnected?: boolean;
+  isOpenMobile?: boolean;
+  onCloseMobile?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ wsConnected = true }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  wsConnected = true,
+  isOpenMobile = false,
+  onCloseMobile,
+}) => {
   const pathname = usePathname();
 
   const navItems = [
@@ -29,23 +35,36 @@ export const Sidebar: React.FC<SidebarProps> = ({ wsConnected = true }) => {
     { label: 'Analytics', href: '/analytics', icon: BarChart3 },
   ];
 
-  return (
-    <aside className="w-64 bg-slate-950/90 border-r border-slate-800/80 flex flex-col justify-between shrink-0 min-h-screen">
+  const sidebarContent = (
+    <div className="flex flex-col justify-between h-full">
       <div>
         {/* Brand Header */}
-        <div className="p-6 border-b border-slate-800/80 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20 text-white">
-            <Wrench className="w-5 h-5 animate-pulse" />
+        <div className="p-5 sm:p-6 border-b border-slate-800/80 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20 text-white">
+              <Wrench className="w-5 h-5 animate-pulse" />
+            </div>
+            <div>
+              <h1 className="font-bold text-lg text-white tracking-wide flex items-center gap-1.5">
+                AutoMotion
+                <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                  PRO
+                </span>
+              </h1>
+              <p className="text-xs text-slate-400">Live Service Dispatch</p>
+            </div>
           </div>
-          <div>
-            <h1 className="font-bold text-lg text-white tracking-wide flex items-center gap-1.5">
-              AutoMotion
-              <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                PRO
-              </span>
-            </h1>
-            <p className="text-xs text-slate-400">Live Service Dispatch</p>
-          </div>
+
+          {/* Close button for mobile drawer */}
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         {/* Navigation Links */}
@@ -60,6 +79,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ wsConnected = true }) => {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onCloseMobile}
                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all ${
                   isActive
                     ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-sm'
@@ -102,6 +122,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ wsConnected = true }) => {
           <span>Instant Dispatch v1.0</span>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* 1. Desktop Persistent Sidebar */}
+      <aside className="hidden md:flex w-64 bg-slate-950/90 border-r border-slate-800/80 flex-col shrink-0 min-h-screen sticky top-0 h-screen z-20">
+        {sidebarContent}
+      </aside>
+
+      {/* 2. Mobile Backdrop & Slide-out Drawer */}
+      {isOpenMobile && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          {/* Dimmed backdrop */}
+          <div
+            onClick={onCloseMobile}
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity"
+          />
+          {/* Slide-out Panel */}
+          <div className="relative w-72 max-w-[85vw] bg-slate-950 border-r border-slate-800 shadow-2xl h-full z-10 animate-in slide-in-from-left duration-200">
+            {sidebarContent}
+          </div>
+        </div>
+      )}
+    </>
   );
 };

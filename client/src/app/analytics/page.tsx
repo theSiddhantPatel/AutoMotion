@@ -14,6 +14,7 @@ export default function AnalyticsPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [days, setDays] = useState(30);
   const [isSimulating, setIsSimulating] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     api.getDashboardAnalytics(days).then((res) => {
@@ -39,16 +40,20 @@ export default function AnalyticsPage() {
 
   return (
     <div className="flex min-h-screen bg-[#090d16]">
-      <Sidebar />
+      <Sidebar
+        isOpenMobile={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
+      />
 
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar
           simulating={isSimulating}
           onToggleSimulation={handleToggleSimulation}
           onOpenNewBooking={() => {}}
+          onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
         />
 
-        <main className="p-6 space-y-6 flex-1 max-w-7xl mx-auto w-full">
+        <main className="p-3 sm:p-6 space-y-4 sm:space-y-6 flex-1 max-w-7xl mx-auto w-full">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-xl font-bold text-white flex items-center gap-2.5">
