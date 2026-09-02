@@ -15,7 +15,8 @@ in simple, easy-to-understand terms: what it is, why we use it, and how it works
   - Next.js provides clean folder-based routing (`src/app/bookings/page.tsx`), fast server
     rendering, automatic code-splitting, and instant zero-config deployment to Vercel.
 • How it works in AutoMotion:
-  - `src/app/page.tsx`       -> The main Live Operations Dashboard.
+  - `src/app/page.tsx`       -> The main Live Operations Dashboard (for Dispatchers).
+  - `src/app/track/page.tsx` -> The Live Customer Portal (Vehicle Owner Service Tracker).
   - `src/app/bookings/page.tsx`  -> Dedicated Bookings Management Hub.
   - `src/app/mechanics/page.tsx` -> Mechanics Fleet Roster & Live GPS Radar Map.
   - `src/app/customers/page.tsx` -> Customer Directory & Lifetime Value Tracker.

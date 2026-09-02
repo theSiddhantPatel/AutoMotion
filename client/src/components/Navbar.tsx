@@ -8,6 +8,7 @@ import {
   BookOpen,
   Search,
   Menu,
+  Radio,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -80,6 +81,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             </>
           )}
         </button>
+
+        {/* Customer Portal Shortcut */}
+        <a
+          href="/track"
+          className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 bg-slate-900 border border-slate-800 hover:border-slate-700 hover:text-white transition-all"
+          title="Open live customer tracking portal"
+        >
+          <Radio className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Customer View</span>
+        </a>
 
         {/* Swagger API Docs Button */}
         <a

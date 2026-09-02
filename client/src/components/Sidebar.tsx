@@ -33,6 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { label: 'Mechanics Fleet', href: '/mechanics', icon: Wrench },
     { label: 'Customers', href: '/customers', icon: Users },
     { label: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { label: 'Customer Portal', href: '/track', icon: Radio, badge: 'Portal' },
   ];
 
   const sidebarContent = (
