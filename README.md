@@ -1,16 +1,22 @@
-#  AutoMotion — Live Vehicle Service Operations Dashboard
+# 🚗 AutoMotion — Live Vehicle Service Operations Dashboard
 
-AutoMotion is a production-grade, real-time SaaS operations platform built for vehicle service dispatchers, fleet operations managers, and mobile technicians.
+AutoMotion is a production-grade, real-time SaaS operations platform built for vehicle service dispatchers, fleet operations managers, mobile technicians, and customer self-service.
 
 ---
 
 ## 🌟 Live Features & Highlights
 
 - ⚡ **Real-Time Operations Telemetry:** Bidirectional WebSocket streaming powered by Socket.io (`Pending` $\to$ `Assigned` $\to$ `En Route` $\to$ `In Progress` $\to$ `Completed`).
-- 🤖 **Interactive Live Simulation Engine:** One-click toggle in the navbar that automatically progresses live vehicle dispatch states to demonstrate real-time telemetry.
-- 📊 **Executive Performance Analytics:** 30/60/90-day revenue trends, booking volume velocity, and service category breakdown charts.
-- 📋 **Operations Bookings Roster:** 620+ seeded records with multi-criteria server-side filtering, instant keyword search, priority badges, pagination, and slide-over dispatch detail drawer.
-- 👨‍🔧 **Technician Fleet Management & GPS Radar:** Live mechanic availability roster with ratings, job counts, and interactive GPS dispatch radar.
+- 🤖 **Interactive Live Simulation Engine:** One-click toggle in the navbar that automatically advances live vehicle dispatch states to demonstrate real-time telemetry.
+- 📱 **Live Customer Tracking Portal (`/track`):** An authentic consumer experience featuring a 5-stage live progress stepper, assigned technician profile (photo, rating, direct call button), and an interactive **AI Car Diagnosis Assistant**.
+- 📊 **Executive Performance Analytics:** 30/60/90-day revenue trends, booking volume velocity, and service category breakdown charts powered by Recharts.
+- 📋 **Operations Bookings Roster:** 620+ seeded records with multi-criteria server-side filtering, debounced search, priority badges, pagination, and slide-over dispatch detail drawer.
+- 📥 **One-Click CSV Operations Export:** Client-side zero-dependency export that downloads filtered dispatch records into Excel-ready `.csv` reports for accounting and auditing.
+- 🔍 **Searchable Customer Combobox & On-the-Fly Registration:** Dispatchers and walk-in customers can search 60+ registered profiles or register a brand-new customer on the fly with atomic database linking.
+- 👨‍🔧 **Technician Fleet Management & GPS Radar:** Live mechanic availability roster with ratings, job counts, and interactive Leaflet GPS dispatch radar.
+- ☀️🌙 **Dual Light & Dark Mode:** Seamless theme switching with high-contrast light mode for daytime dispatching and sleek dark mode for control rooms.
+- 📱 **100% Mobile Responsive:** Slide-out drawer navigation, fluid navbar controls, and touch-optimized swipeable tables for field operations on phones and tablets.
+- 🛡️ **Production Security & Performance:** Configured with `express-rate-limit` (DDoS mitigation with reverse-proxy trust), `compression` (Gzip/Brotli payload compression saving 75% bandwidth), and `helmet` security headers.
 - 📖 **Interactive Swagger / OpenAPI Documentation:** Direct in-browser API explorer and testing playground at `/api/docs`.
 
 ---
@@ -20,20 +26,22 @@ AutoMotion is a production-grade, real-time SaaS operations platform built for v
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                      Frontend (Client)                      │
-│   Next.js (App Router) + TypeScript + Tailwind CSS + Lucide │
-│          Recharts (Analytics) + Socket.io Client            │
+│   Next.js (App Router) + TypeScript + Tailwind CSS v4       │
+│   Recharts (Analytics) + Leaflet (GPS) + Socket.io Client   │
+│   Light / Dark Mode + Mobile Drawer + CSV Reporting Export  │
 └──────────────────────────────┬──────────────────────────────┘
                                │  REST API + WebSockets
 ┌──────────────────────────────▼──────────────────────────────┐
 │                      Backend (Server)                       │
 │      Node.js + Express + TypeScript + Socket.io Server      │
-│             Zod Validation + Helmet + Morgan                │
-│                 Swagger / OpenAPI Specs                     │
+│      Rate Limiting + Gzip Compression + Helmet + Morgan     │
+│      Zod Validation + Swagger / OpenAPI Specs               │
 └──────────────────────────────┬──────────────────────────────┘
                                │  Prisma ORM
 ┌──────────────────────────────▼──────────────────────────────┐
 │                 Cloud Database (Neon DB)                    │
 │    PostgreSQL (Bookings, Mechanics, Customers, Services)    │
+│    620+ Seeded Historical & Active Operations Records       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -82,6 +90,7 @@ npm run dev
 ```
 * API Server will run at: `http://localhost:5000`
 * Interactive Swagger API Docs: `http://localhost:5000/api/docs`
+* Health Check: `http://localhost:5000/api/health`
 
 ---
 
@@ -93,6 +102,7 @@ npm install
 npm run dev
 ```
 * Frontend Dashboard will open at: `http://localhost:3000`
+* Customer Portal will open at: `http://localhost:3000/track`
 
 ---
 
@@ -100,12 +110,12 @@ npm run dev
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `GET` | `/api/health` | Service health check and uptime |
+| `GET` | `/api/health` | Service health check, uptime, and database connectivity |
 | `GET` | `/api/dashboard/stats` | High-level KPI metrics (revenue, total bookings, fleet status) |
 | `GET` | `/api/dashboard/analytics` | Time-series charts, status distributions, and category revenue |
-| `GET` | `/api/bookings` | Paginated bookings with search, status, and priority filters |
+| `GET` | `/api/bookings` | Paginated bookings with debounced search, status, and priority filters |
 | `GET` | `/api/bookings/:id` | Single booking details with full audit log trail |
-| `POST` | `/api/bookings` | Create new vehicle booking with Zod validation |
+| `POST` | `/api/bookings` | Create new booking (supports existing ID or on-the-fly new customer) |
 | `PATCH` | `/api/bookings/:id/status` | Update booking status & broadcast live WebSocket event |
 | `GET` | `/api/mechanics` | Fleet availability, ratings, active jobs, and coordinates |
 | `GET` | `/api/customers` | Customer directory with lifetime value calculations |

@@ -8,10 +8,19 @@ import { initSocketServer } from './sockets/socketManager.js';
 import routes from './routes/index.js';
 import { setupSwagger } from './swagger.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import rateLimit from 'express-rate-limit';
+import compression from 'compression';
 
 const app: Express = express();
+app.set('trust proxy', 1);
 const httpServer = http.createServer(app);
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-8",
+  legacyHeaders: false
+})
 // 1. Security & Core Middleware
 app.use(helmet({
   contentSecurityPolicy: false, // Allows Swagger UI to load inline styles/scripts
@@ -24,8 +33,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(compression());
 app.use(express.urlencoded({ extended: true }));
-
+app.use("/api", limiter); //rate limiting
 // 2. HTTP Request Logger
 if (config.isDev) {
   app.use(morgan('dev'));

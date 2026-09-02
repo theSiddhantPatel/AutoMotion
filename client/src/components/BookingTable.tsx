@@ -22,6 +22,7 @@ import {
   AlertCircle,
   Eye,
   SlidersHorizontal,
+  Download,
 } from 'lucide-react';
 
 interface BookingTableProps {
@@ -113,6 +114,55 @@ export const BookingTable: React.FC<BookingTableProps> = ({
   onSelectBooking,
   isLoading = false,
 }) => {
+  const handleExportCSV = () => {
+    if (!bookings || bookings.length === 0) return;
+
+    // 1. Column headers
+    const headers = [
+      'Booking ID',
+      'Customer Name',
+      'Phone',
+      'Email',
+      'Vehicle',
+      'License Plate',
+      'Service',
+      'Amount ($)',
+      'Status',
+      'Priority',
+      'Scheduled Date',
+      'Customer Address',
+    ];
+
+    // 2. Format rows with escaped quotes
+    const rows = bookings.map((b) => [
+      b.bookingNumber,
+      `"${b.customer.name}"`,
+      `"${b.customer.phone}"`,
+      `"${b.customer.email}"`,
+      `"${b.vehicleYear} ${b.vehicleMake} ${b.vehicleModel}"`,
+      b.licensePlate,
+      `"${b.service.name}"`,
+      b.amount.toFixed(2),
+      b.status,
+      b.priority,
+      `"${new Date(b.scheduledAt).toLocaleDateString()}"`,
+      `"${(b.customerAddress || '').replace(/"/g, '""')}"`,
+    ]);
+
+    // 3. Assemble CSV string
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+
+    // 4. Download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `AutoMotion_Bookings_Report_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden backdrop-blur-md shadow-xs transition-colors">
       {/* Header & Filter Controls Bar */}
@@ -181,6 +231,16 @@ export const BookingTable: React.FC<BookingTableProps> = ({
               <option value="EMERGENCY">Emergency</option>
             </select>
           </div>
+
+          {/* Export to CSV Button */}
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 transition-all cursor-pointer shrink-0"
+            title="Download CSV report for Excel"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export CSV</span>
+          </button>
         </div>
       </div>
 
