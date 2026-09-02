@@ -250,6 +250,6 @@ This REST API powers the live operations hub for dispatchers, technicians, and o
 export function setupSwagger(app: Express) {
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'AutoMotion - API Docs',
+    customSiteTitle: 'Instant Mechanic - API Docs',
   }));
 }

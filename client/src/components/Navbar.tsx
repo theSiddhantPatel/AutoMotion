@@ -10,6 +10,7 @@ import {
   Menu,
   Radio,
 } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
 
 interface NavbarProps {
   simulating: boolean;
@@ -103,6 +104,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
           <span>API Docs</span>
         </a>
+
+        {/* Light / Dark Mode Toggle */}
+        <ThemeToggle />
 
         {/* Create Booking Button */}
         <button
