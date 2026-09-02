@@ -37,7 +37,7 @@ export const NewBookingModal: React.FC<NewBookingModalProps> = ({
 
   const selectedService = services.find((s) => s.id === serviceId);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {

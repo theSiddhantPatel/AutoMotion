@@ -127,8 +127,29 @@ export const BookingTable: React.FC<BookingTableProps> = ({
           <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">Live vehicle dispatch queue and telemetry</p>
         </div>
 
-        {/* Filter controls */}
+        {/* Filter & Search controls */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* Table Search Input */}
+          <div className="relative flex-1 sm:w-60 min-w-[160px]">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search ID, plate, customer..."
+              value={search || ''}
+              onChange={(e) => onSearchChange?.(e.target.value)}
+              className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl pl-8 pr-7 py-1.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all"
+            />
+            {search && (
+              <button
+                onClick={() => onSearchChange?.('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs cursor-pointer p-0.5"
+                title="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           {/* Status Filter */}
           <div className="relative flex-1 sm:flex-none">
             <select
@@ -151,7 +172,7 @@ export const BookingTable: React.FC<BookingTableProps> = ({
             <select
               value={priorityFilter}
               onChange={(e) => onPriorityFilterChange(e.target.value)}
-              className="w-full sm:w-auto bg-slate-950/80 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
+              className="w-full sm:w-auto bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
             >
               <option value="">All Priorities</option>
               <option value="LOW">Low</option>

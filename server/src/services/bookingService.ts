@@ -130,8 +130,11 @@ export class BookingService {
     }
 
     // 2. Generate unique booking number
-    const count = await prisma.booking.count();
-    const bookingNumber = `BK-${10000 + count + 1}`;
+    // const count = await prisma.booking.count();
+    // const bookingNumber = `${10000 + count + 1}`;
+    //to make booking collision proof: 
+    // Generates a clean 6-digit timestamp like "839201"
+    const bookingNumber = `${Date.now().toString().slice(-6)}`;
 
     const booking = await prisma.booking.create({
       data: {

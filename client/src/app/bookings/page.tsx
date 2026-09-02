@@ -18,6 +18,7 @@ export default function BookingsPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [mechanics, setMechanics] = useState<Mechanic[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -27,13 +28,21 @@ export default function BookingsPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Debounce search by 300ms to prevent race conditions
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [search]);
+
   const loadBookings = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await api.getBookings({
         page: currentPage,
         limit: 12,
-        search: search || undefined,
+        search: debouncedSearch.trim() || undefined,
         status: statusFilter || undefined,
         priority: priorityFilter || undefined,
       });
@@ -49,7 +58,7 @@ export default function BookingsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, search, statusFilter, priorityFilter]);
+  }, [currentPage, debouncedSearch, statusFilter, priorityFilter]);
 
   useEffect(() => {
     loadBookings();

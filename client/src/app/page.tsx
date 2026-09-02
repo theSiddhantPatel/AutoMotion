@@ -44,10 +44,19 @@ export default function DashboardPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [mechanics, setMechanics] = useState<Mechanic[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [liveLogs, setLiveLogs] = useState<any[]>([]);
+
+  // Debounce search input by 300ms to prevent race conditions
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [search]);
 
   // Simulation & Modals
   const [isSimulating, setIsSimulating] = useState(false);
@@ -93,7 +102,7 @@ export default function DashboardPage() {
       const res = await api.getBookings({
         page: currentPage,
         limit: 10,
-        search: search || undefined,
+        search: debouncedSearch.trim() || undefined,
         status: statusFilter || undefined,
         priority: priorityFilter || undefined,
       });
@@ -110,7 +119,7 @@ export default function DashboardPage() {
     } finally {
       setIsLoadingBookings(false);
     }
-  }, [currentPage, search, statusFilter, priorityFilter]);
+  }, [currentPage, debouncedSearch, statusFilter, priorityFilter]);
 
   // Initial load
   useEffect(() => {
