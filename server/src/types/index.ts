@@ -2,7 +2,12 @@ import { z } from 'zod';
 import { BookingStatus, PriorityLevel, MechanicStatus } from '@prisma/client';
 
 export const CreateBookingSchema = z.object({
-  customerId: z.string().uuid({ message: 'Valid customer ID is required' }),
+  customerId: z.string().uuid().optional().nullable(),
+  newCustomer: z.object({
+    name: z.string().min(2, 'Customer name must be at least 2 characters'),
+    email: z.string().email('Valid customer email is required'),
+    phone: z.string().min(7, 'Valid customer phone number is required'),
+  }).optional(),
   serviceId: z.string().uuid({ message: 'Valid service item ID is required' }),
   mechanicId: z.string().uuid().optional().nullable(),
   vehicleMake: z.string().min(1, 'Vehicle make is required'),

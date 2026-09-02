@@ -250,7 +250,7 @@ export default function CustomerTrackPage() {
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.15] text-slate-900 dark:text-white">
             Precision Mobile Mechanics,{' '}
             <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
-              Dispatched to Your Door.
+              Dispatched to Your Location.
             </span>
           </h1>
 

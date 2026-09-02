@@ -129,17 +129,40 @@ export class BookingService {
       throw new Error('Selected service not found.');
     }
 
-    // 2. Generate unique booking number
-    // const count = await prisma.booking.count();
-    // const bookingNumber = `${10000 + count + 1}`;
-    //to make booking collision proof: 
+    // 2. Resolve or create customer record
+    let finalCustomerId = input.customerId;
+
+    if (!finalCustomerId && input.newCustomer) {
+      let customer = await prisma.customer.findUnique({
+        where: { email: input.newCustomer.email.toLowerCase().trim() },
+      });
+
+      if (!customer) {
+        customer = await prisma.customer.create({
+          data: {
+            name: input.newCustomer.name.trim(),
+            email: input.newCustomer.email.toLowerCase().trim(),
+            phone: input.newCustomer.phone.trim(),
+            address: input.customerAddress.trim(),
+            avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(input.newCustomer.name.replace(/\s+/g, ''))}`,
+          },
+        });
+      }
+      finalCustomerId = customer.id;
+    }
+
+    if (!finalCustomerId) {
+      throw new Error('Customer information is required to place a booking.');
+    }
+
+    // 3. Generate collision-proof booking number
     // Generates a clean 6-digit timestamp like "839201"
     const bookingNumber = `${Date.now().toString().slice(-6)}`;
 
     const booking = await prisma.booking.create({
       data: {
         bookingNumber,
-        customerId: input.customerId,
+        customerId: finalCustomerId,
         serviceId: input.serviceId,
         mechanicId: input.mechanicId || null,
         vehicleMake: input.vehicleMake,
