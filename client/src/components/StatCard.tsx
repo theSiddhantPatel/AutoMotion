@@ -65,7 +65,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <div
-      className={`p-5 rounded-2xl bg-gradient-to-br ${styles.bg} border ${styles.border} backdrop-blur-sm relative overflow-hidden transition-all hover:scale-[1.01] hover:shadow-lg`}
+      className={`p-5 rounded-2xl bg-white/90 dark:bg-slate-900/60 bg-gradient-to-br ${styles.bg} border ${styles.border} backdrop-blur-sm relative overflow-hidden transition-all hover:scale-[1.01] hover:shadow-lg`}
     >
       {/* Background soft glow accent */}
       <div
@@ -75,10 +75,10 @@ export const StatCard: React.FC<StatCardProps> = ({
 
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-semibold text-slate-400 tracking-wider uppercase">{title}</p>
-          <h3 className="text-2xl font-bold text-white mt-1.5 tracking-tight">{value}</h3>
+          <p className="text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wider uppercase">{title}</p>
+          <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1.5 tracking-tight">{value}</h3>
         </div>
-        <div className={`p-2.5 rounded-xl ${styles.iconBg} border border-white/5`}>
+        <div className={`p-2.5 rounded-xl ${styles.iconBg} border border-slate-200 dark:border-white/5`}>
           <Icon className="w-5 h-5" />
         </div>
       </div>

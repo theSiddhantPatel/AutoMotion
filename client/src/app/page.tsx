@@ -235,7 +235,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#090d16]">
+    <div className="flex min-h-screen bg-slate-100/70 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors">
       {/* Navigation Sidebar */}
       <Sidebar
         wsConnected={wsConnected}

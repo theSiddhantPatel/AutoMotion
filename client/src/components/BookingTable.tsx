@@ -114,17 +114,17 @@ export const BookingTable: React.FC<BookingTableProps> = ({
   isLoading = false,
 }) => {
   return (
-    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden backdrop-blur-md">
+    <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden backdrop-blur-md shadow-xs transition-colors">
       {/* Header & Filter Controls Bar */}
-      <div className="p-4 sm:p-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+      <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
             Operations Bookings Roster
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono">
               {totalBookings} Total
             </span>
           </h2>
-          <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">Live vehicle dispatch queue and telemetry</p>
+          <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">Live vehicle dispatch queue and telemetry</p>
         </div>
 
         {/* Filter controls */}
@@ -134,7 +134,7 @@ export const BookingTable: React.FC<BookingTableProps> = ({
             <select
               value={statusFilter}
               onChange={(e) => onStatusFilterChange(e.target.value)}
-              className="w-full sm:w-auto bg-slate-950/80 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
+              className="w-full sm:w-auto bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
             >
               <option value="">All Statuses</option>
               <option value="PENDING">Pending</option>
@@ -171,7 +171,7 @@ export const BookingTable: React.FC<BookingTableProps> = ({
       {/* Table Content */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="bg-slate-950/60 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800/80">
+          <thead className="bg-slate-50 dark:bg-slate-950/60 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800/80">
             <tr>
               <th className="py-3.5 px-4">Booking ID</th>
               <th className="py-3.5 px-4">Customer</th>
@@ -184,19 +184,19 @@ export const BookingTable: React.FC<BookingTableProps> = ({
               <th className="py-3.5 px-4 text-center">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/50">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
             {isLoading ? (
               <tr>
-                <td colSpan={9} className="py-16 text-center text-slate-500">
+                <td colSpan={9} className="py-16 text-center text-slate-400">
                   <div className="inline-flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
                     Loading live bookings...
                   </div>
                 </td>
               </tr>
             ) : bookings.length === 0 ? (
               <tr>
-                <td colSpan={9} className="py-16 text-center text-slate-500">
+                <td colSpan={9} className="py-16 text-center text-slate-400">
                   No bookings found matching your search or filters.
                 </td>
               </tr>
@@ -210,10 +210,10 @@ export const BookingTable: React.FC<BookingTableProps> = ({
                   <tr
                     key={b.id}
                     onClick={() => onSelectBooking(b)}
-                    className="hover:bg-slate-800/40 transition-all cursor-pointer group"
+                    className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer"
                   >
                     {/* Booking ID & Priority */}
-                    <td className="py-3 px-4 font-mono font-medium text-slate-200">
+                    <td className="py-3 px-4 font-mono font-medium text-slate-900 dark:text-slate-200">
                       <div className="flex items-center gap-1.5">
                         <span>{b.bookingNumber}</span>
                         {b.priority === 'EMERGENCY' && (
@@ -234,42 +234,51 @@ export const BookingTable: React.FC<BookingTableProps> = ({
                             <User className="w-4 h-4 m-1.5 text-slate-400" />
                           )}
                         </div>
-                        <div className="min-w-0">
-                          <p className="font-semibold text-slate-200 truncate">{b.customer.name}</p>
-                          <p className="text-[10px] text-slate-400 truncate">{b.customer.phone}</p>
+                        <div>
+                          <p className="font-semibold text-slate-900 dark:text-white">{b.customer.name}</p>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">{b.customer.phone}</p>
                         </div>
                       </div>
                     </td>
 
                     {/* Vehicle */}
                     <td className="py-3 px-4">
-                      <div className="min-w-0">
-                        <p className="font-medium text-slate-200 truncate">
-                          {b.vehicleMake} {b.vehicleModel}
+                      <div>
+                        <p className="text-slate-800 dark:text-slate-200 font-medium">
+                          {b.vehicleYear} {b.vehicleMake} {b.vehicleModel}
                         </p>
-                        <p className="text-[10px] font-mono text-slate-400">
-                          {b.licensePlate} • {b.vehicleYear}
-                        </p>
+                        <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">{b.licensePlate}</p>
                       </div>
                     </td>
 
                     {/* Service */}
                     <td className="py-3 px-4">
-                      <div className="min-w-0 max-w-[170px]">
-                        <p className="font-medium text-slate-200 truncate">{b.service.name}</p>
-                        <p className="text-[10px] text-slate-400">{b.service.category}</p>
+                      <div>
+                        <p className="font-medium text-slate-800 dark:text-slate-200">{b.service.name}</p>
+                        <span className="text-[10px] text-slate-500">
+                          {b.service.category} • ~{b.service.estimatedDuration}m
+                        </span>
                       </div>
                     </td>
 
                     {/* Mechanic */}
                     <td className="py-3 px-4">
                       {b.mechanic ? (
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                          <span className="font-medium text-slate-300 truncate">{b.mechanic.name}</span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
+                            <img
+                              src={b.mechanic.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${b.mechanic.name}`}
+                              alt={b.mechanic.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <p className="font-medium text-slate-800 dark:text-slate-200">{b.mechanic.name}</p>
+                            <p className="text-[10px] text-amber-500 font-bold">★ {b.mechanic.rating.toFixed(1)}</p>
+                          </div>
                         </div>
                       ) : (
-                        <span className="text-slate-400 italic">Unassigned</span>
+                        <span className="text-slate-400 italic text-[11px]">Unassigned</span>
                       )}
                     </td>
 
