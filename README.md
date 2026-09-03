@@ -106,6 +106,37 @@ npm run dev
 
 ---
 
+## ☁️ Cloud Deployment Guide
+
+### 1. Backend Deployment (Render / Railway / AWS)
+* **Root Directory:** `server`
+* **Environment:** `Node`
+* **Build Command:**
+  ```bash
+  npm install --include=dev && npx prisma generate && npm run build
+  ```
+  * **Why `--include=dev`?** Forces `npm` to install TypeScript compiler and `@types/*` even when `NODE_ENV=production` is set in cloud containers.
+  * **Why `npx prisma generate`?** Generates the custom PostgreSQL typed database client inside the clean cloud build container.
+  * **Why `npm run build`?** Compiles all TypeScript files from `src/` into fast JavaScript in `dist/`.
+* **Start Command:**
+  ```bash
+  npm start
+  ```
+* **Environment Variables on Cloud Host:**
+  * `DATABASE_URL`: Your cloud PostgreSQL connection string (Neon DB).
+  * `NODE_ENV`: `production`
+  * `CLIENT_URL`: `*` (or your live Vercel URL)
+
+### 2. Frontend Deployment (Vercel)
+* **Root Directory:** `client`
+* **Framework Preset:** `Next.js`
+* **Build Command:** `next build` (default)
+* **Environment Variables:**
+  * `NEXT_PUBLIC_API_URL`: `https://your-backend.onrender.com/api`
+  * `NEXT_PUBLIC_SOCKET_URL`: `https://your-backend.onrender.com`
+
+---
+
 ## 📡 API Endpoints Overview
 
 | Method | Endpoint | Description |
