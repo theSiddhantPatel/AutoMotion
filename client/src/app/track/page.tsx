@@ -70,12 +70,16 @@ export default function CustomerTrackPage() {
   // Load sample active bookings
   useEffect(() => {
     setIsLoading(true);
-    api.getBookings({ limit: 8, sortBy: 'createdAt', sortOrder: 'desc' }).then((res) => {
+    api.getBookings({ limit: 12, sortBy: 'createdAt', sortOrder: 'desc' }).then((res) => {
       setIsLoading(false);
       if (res.success && res.data && res.data.length > 0) {
         setActiveBookings(res.data);
-        setBooking(res.data[0]);
-        setSearchQuery(res.data[0].bookingNumber);
+        // Prioritize showing an active in-flight job so live updates are immediately visible
+        const activeItem =
+          res.data.find((b) => b.status !== 'COMPLETED' && b.status !== 'CANCELLED') ||
+          res.data[0];
+        setBooking(activeItem);
+        setSearchQuery(activeItem.bookingNumber);
       }
     });
 
@@ -101,10 +105,16 @@ export default function CustomerTrackPage() {
     socket.on('disconnect', handleDisconnect);
     setWsConnected(socket.connected);
 
-    socket.on('booking:updated', ({ booking: updatedBooking }) => {
+    socket.on('booking:created', (newBooking: any) => {
+      setBooking(newBooking);
+      setSearchQuery(newBooking.bookingNumber);
+      setActiveBookings((prev) => [newBooking, ...prev.slice(0, 11)]);
+    });
+
+    socket.on('booking:updated', ({ booking: updatedBooking }: any) => {
       setBooking((curr) => {
-        if (curr && curr.id === updatedBooking.id) {
-          return { ...curr, ...updatedBooking };
+        if (!curr || curr.id === updatedBooking.id || curr.bookingNumber === updatedBooking.bookingNumber) {
+          return { ...(curr || {}), ...updatedBooking };
         }
         return curr;
       });
@@ -117,6 +127,7 @@ export default function CustomerTrackPage() {
     return () => {
       socket.off('connect', handleConnect);
       socket.off('disconnect', handleDisconnect);
+      socket.off('booking:created');
       socket.off('booking:updated');
     };
   }, []);
