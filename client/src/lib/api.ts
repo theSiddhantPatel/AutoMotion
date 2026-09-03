@@ -1,6 +1,8 @@
 import { ApiResponse, DashboardStats, AnalyticsData, Booking, Mechanic, Customer, ServiceItem } from '../types/index';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const cleanUrl = rawApiUrl.replace(/\/+$/, '');
+const API_BASE = cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
 
 async function fetcher<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
   try {
