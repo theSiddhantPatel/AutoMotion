@@ -130,16 +130,11 @@ export default function CustomerTrackPage() {
     setErrorMsg('');
 
     try {
-      let res = await api.getBookings({ search: query, limit: 1 });
-      // If user typed just numbers (e.g. 10434), fallback to check BK-10434 as well
-      if ((!res.success || !res.data || res.data.length === 0) && !query.startsWith('BK-')) {
-        res = await api.getBookings({ search: `BK-${query}`, limit: 1 });
-      }
-
+      const res = await api.getBookings({ search: query, limit: 1 });
       if (res.success && res.data && res.data.length > 0) {
         setBooking(res.data[0]);
       } else {
-        setErrorMsg(`No booking found matching "${query}". Please check your booking code.`);
+        setErrorMsg(`No booking found matching "${query}". Please check your 6-digit booking code.`);
       }
     } catch (err) {
       setErrorMsg('Failed looking up booking. Please try again.');
@@ -341,7 +336,7 @@ export default function CustomerTrackPage() {
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Enter Booking ID (e.g. 10952)..."
+                placeholder="Enter 6-digit Booking ID (e.g. 100025)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 shadow-xs"

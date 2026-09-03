@@ -187,7 +187,7 @@ async function main() {
       scheduledAt = new Date(createdAt.getTime() + 45 * 60 * 1000);
     }
 
-    const bookingNumber = `BK-${10000 + i}`;
+    const bookingNumber = `${100000 + i}`;
 
     const booking = await prisma.booking.create({
       data: {
